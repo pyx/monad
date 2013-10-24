@@ -11,3 +11,4 @@ API Reference
    api/decorators
    api/exceptions
    api/types/index
+   api/utils
