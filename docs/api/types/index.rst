@@ -11,3 +11,4 @@ Types
    monadic
    monad
    monadplus
+   identity
