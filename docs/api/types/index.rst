@@ -12,3 +12,4 @@ Types
    monad
    monadplus
    identity
+   maybe
