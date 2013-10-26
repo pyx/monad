@@ -10,5 +10,6 @@ API Reference
    api/actions
    api/decorators
    api/exceptions
+   api/mixins
    api/types/index
    api/utils
