@@ -6,3 +6,4 @@ Types
    null
    lazysequence
    functor
+   applicative
