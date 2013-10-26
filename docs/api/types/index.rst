@@ -5,3 +5,4 @@ Types
 
    null
    lazysequence
+   functor
