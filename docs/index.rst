@@ -4,7 +4,9 @@ Welcome to Monad's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+
+   reference
 
 
 Indices and tables
