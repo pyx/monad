@@ -4,8 +4,10 @@
 import pytest
 
 from monad.types import Functor
+from monad.types import Identity
 
 testee = [
+    Identity,
 ]
 test_range = range(-100, 100)
 ids = [t.__name__ for t in testee]
