@@ -10,3 +10,4 @@ Types
    function
    monadic
    monad
+   monadplus
