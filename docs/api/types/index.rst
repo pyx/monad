@@ -9,3 +9,4 @@ Types
    applicative
    function
    monadic
+   monad
