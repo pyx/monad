@@ -13,3 +13,4 @@ Types
    monadplus
    identity
    maybe
+   either
