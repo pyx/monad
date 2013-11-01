@@ -14,3 +14,4 @@ Types
    identity
    maybe
    either
+   list
