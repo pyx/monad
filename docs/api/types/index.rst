@@ -8,3 +8,4 @@ Types
    functor
    applicative
    function
+   monadic
