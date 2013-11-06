@@ -7,3 +7,4 @@ Types
    lazysequence
    functor
    applicative
+   function
