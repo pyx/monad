@@ -4,3 +4,4 @@ Types
 .. toctree::
 
    null
+   lazysequence
