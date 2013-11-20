@@ -2,3 +2,5 @@ Types
 =====
 
 .. toctree::
+
+   null
