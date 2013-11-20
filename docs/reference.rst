@@ -7,6 +7,7 @@ API Reference
 .. toctree::
    :maxdepth: 2
 
+   api/actions
    api/decorators
    api/exceptions
    api/types/index
