@@ -4,7 +4,47 @@
 """monad.actions - useful monadic actions."""
 
 from .decorators import function, monadic
+from .types import Either, Left, Right
 from .types import Just, Nothing
+from .utils import identity
+
+
+@function
+def either(left_handler, right_handler=identity):
+    """Case analysis for ``Either``.
+
+    Returns a function that when called with a value of type ``Either``,
+    applies either ``left_handler`` or ``right_handler`` to that value
+    depending on the type of it.  If an incompatible value is passed, a
+    ``TypeError`` will be raised.
+
+    >>> def log(v):
+    ...     print('Got Left({})'.format(v))
+    >>> logger = either(left_handler=log)
+    >>> logger(Left(1))
+    Got Left(1)
+    >>> logger(Right(1))
+    1
+    >>> def inc(v):
+    ...     return v + 1
+    >>> act = either(log, inc)
+    >>> [act(v) for v in (Left(0), Right(1), Left(2), Right(3))]
+    Got Left(0)
+    Got Left(2)
+    [None, 2, None, 4]
+    """
+    @function
+    def analysis(an_either):
+        """Apply handler functions based on value."""
+        aug_type = type(an_either)
+        if not issubclass(aug_type, Either):
+            raise TypeError(
+                'applied either on incompatible type: %s' % aug_type)
+        if issubclass(aug_type, Left):
+            return left_handler(an_either.value)
+        assert issubclass(aug_type, Right)
+        return right_handler(an_either.value)
+    return analysis
 
 
 @function
@@ -73,7 +113,7 @@ def first(sequence, default=Nothing, predicate=None):
 
     This is basically a customized version of ``msum`` for :class:`Maybe`,
     a separate function like this is needed because there is no way to write a
-    generic ``msum`` in python that be evaluated in a non-strict way.
+    generic ``msum`` in python that cab be evaluated in a non-strict way.
     The obvious ``reduce(operator.add, sequence)``, albeit beautiful, is
     strict, unless we build up the sequence with generator expressions
     in-place.
@@ -97,6 +137,7 @@ def first(sequence, default=Nothing, predicate=None):
 # them, the following adds those docstring into testsuite back again,
 # explicitly.
 __test__ = {
+    'either': either.__doc__,
     'tryout': tryout.__doc__,
     'first': first.__doc__,
 }

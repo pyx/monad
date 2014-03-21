@@ -13,6 +13,7 @@ from .monad import Monad
 from .monadplus import MonadPlus
 from .identity import Identity
 from .maybe import Maybe, Just, Nothing
+from .either import Either, Left, Right
 
 __all__ = [
     'Null',
@@ -27,4 +28,7 @@ __all__ = [
     'Maybe',
     'Just',
     'Nothing',
+    'Either',
+    'Left',
+    'Right',
 ]

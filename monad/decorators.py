@@ -10,6 +10,7 @@ from .types import Null
 from .types import Function
 from .types import Monadic
 from .types import Just, Nothing
+from .types import Left, Right
 from .utils import ignore_exception_set, suppress
 
 
@@ -122,4 +123,99 @@ def maybe(callable_object=None,
                 return Nothing
             return Just(result)
         return Nothing
+    return monadic(wrapper)
+
+
+def failsafe(callable_object=None,
+             predicate=None,
+             left_on_value=Null,
+             left_on_exception=Exception):
+    """Transform a callable into a function returns an :py:class:`Either`.
+
+    >>> parse_int = failsafe(int)
+    >>> parse_int(42)
+    Right(42)
+    >>> parse_int(42.0)
+    Right(42)
+    >>> parse_int('42')
+    Right(42)
+    >>> parse_int('invalid')
+    Left(ValueError(...))
+
+    >>> parse_pos = failsafe(int, predicate=lambda i: i > 0)
+    >>> parse_pos('42')
+    Right(42)
+    >>> parse_pos('-42')
+    Left(-42)
+
+    >>> parse_nonzero = failsafe(int, left_on_value=0)
+    >>> parse_nonzero('42')
+    Right(42)
+    >>> parse_nonzero('0')
+    Left(0)
+
+    >>> @failsafe(left_on_exception=ZeroDivisionError)
+    ... def safe_div(a, b):
+    ...     return a / b
+    >>> safe_div(42.0, 2)
+    Right(21.0)
+    >>> safe_div(42, 0)
+    Left(ZeroDivisionError(...))
+
+    When invoked, this new function returns the return value of decorated
+    function, wrapped in an :py:class:`Either` monad.
+
+    ``predicate`` should be a false value, or be set to a callable.
+    The default is ``None``.
+
+    ``left_on_value`` can be set to any object supporting comparison against
+    return value of the original function.
+    The default is ``Null``, which means no checking on the return value.
+
+    ``left_on_exception`` should be a false value, or a type of exception,
+    or a tuple of exceptions.
+    The default is ``Exception``, which will suppress most exceptions and
+    return ``Left(exception)`` instead.
+
+    The returned monad will be :py:class:`Left` if
+
+    - ``predicate`` is set, and ``predicate(result_from_decorated_function)``
+      returns true value (not necessarily equal to ``True``)
+    - ``left_on_value`` is set and the result from decorated function matches
+      it, testing with ``==``
+    - ``left_on_exception`` is set and a compatible exception has been caught,
+      the exception will be suppressed in this case, and the value of
+      exception will be wrapped in a :py:class:`Left`
+    - exception ``ExtractError`` has been caught, this could be the case, for
+      example, trying to extract value from ``Nothing``
+    - any combination of the above
+
+    Otherwise, the result will be wrapped in a :py:class:`Right`.
+    """
+    if callable_object is None:
+        return partial(failsafe,
+                       predicate=predicate,
+                       left_on_value=left_on_value,
+                       left_on_exception=left_on_exception)
+
+    exceptions = ignore_exception_set(left_on_exception)
+
+    @wraps(callable_object)
+    def wrapper(*args, **kwargs):
+        """Monadic function wrapper for Either"""
+        try:
+            result = callable_object(*args, **kwargs)
+            if left_on_value is not Null and result == left_on_value:
+                return Left(result)
+            if predicate is not None and not predicate(result):
+                return Left(result)
+            return Right(result)
+        except ExtractError as ex:
+            monad = ex.monad
+            if isinstance(monad, Left):
+                return ex.monad
+            else:
+                return Left(ex)
+        except tuple(exceptions) as ex:
+            return Left(ex)
     return monadic(wrapper)
