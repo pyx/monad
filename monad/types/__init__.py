@@ -10,6 +10,7 @@ from .applicative import Applicative
 from .function import Function
 from .monadic import Monadic
 from .monad import Monad
+from .monadplus import MonadPlus
 
 __all__ = [
     'Null',
@@ -19,4 +20,5 @@ __all__ = [
     'Function',
     'Monadic',
     'Monad',
+    'MonadPlus',
 ]
