@@ -3,10 +3,12 @@
 # License: BSD New, see LICENSE for details.
 from monad.types import Identity
 from monad.types import Maybe
+from monad.types import Either
 
 testee = [
     Identity,
     Maybe,
+    Either,
 ]
 test_range = range(-100, 100)
 ids = [t.__name__ for t in testee]
