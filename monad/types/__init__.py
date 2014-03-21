@@ -3,5 +3,8 @@
 # License: BSD New, see LICENSE for details.
 """monad.types - types"""
 
+from .null import Null
+
 __all__ = [
+    'Null',
 ]
