@@ -11,6 +11,7 @@ from .function import Function
 from .monadic import Monadic
 from .monad import Monad
 from .monadplus import MonadPlus
+from .identity import Identity
 
 __all__ = [
     'Null',
@@ -21,4 +22,5 @@ __all__ = [
     'Monadic',
     'Monad',
     'MonadPlus',
+    'Identity',
 ]
