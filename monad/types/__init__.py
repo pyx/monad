@@ -7,10 +7,12 @@ from .null import Null
 from .lazysequence import LazySequence
 from .functor import Functor
 from .applicative import Applicative
+from .function import Function
 
 __all__ = [
     'Null',
     'LazySequence',
     'Functor',
     'Applicative',
+    'Function',
 ]
