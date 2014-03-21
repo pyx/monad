@@ -4,11 +4,13 @@
 from monad.types import Identity
 from monad.types import Maybe
 from monad.types import Either
+from monad.types import List
 
 testee = [
     Identity,
     Maybe,
     Either,
+    List,
 ]
 test_range = range(-100, 100)
 ids = [t.__name__ for t in testee]
