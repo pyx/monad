@@ -6,9 +6,11 @@
 from .null import Null
 from .lazysequence import LazySequence
 from .functor import Functor
+from .applicative import Applicative
 
 __all__ = [
     'Null',
     'LazySequence',
     'Functor',
+    'Applicative',
 ]
