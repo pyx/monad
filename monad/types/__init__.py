@@ -4,7 +4,9 @@
 """monad.types - types"""
 
 from .null import Null
+from .lazysequence import LazySequence
 
 __all__ = [
     'Null',
+    'LazySequence',
 ]
