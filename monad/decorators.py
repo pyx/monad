@@ -4,6 +4,7 @@
 """monad.decorators - helpful decorators."""
 
 from .types import Function
+from .types import Monadic
 
 
 def function(callable_object):
@@ -22,3 +23,8 @@ def function(callable_object):
     Hello, world
     """
     return Function(callable_object)
+
+
+def monadic(callable_object):
+    """Decorator that wraps a callabe into :class:`Monadic`."""
+    return Monadic(callable_object)

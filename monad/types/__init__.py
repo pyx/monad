@@ -8,6 +8,7 @@ from .lazysequence import LazySequence
 from .functor import Functor
 from .applicative import Applicative
 from .function import Function
+from .monadic import Monadic
 
 __all__ = [
     'Null',
@@ -15,4 +16,5 @@ __all__ = [
     'Functor',
     'Applicative',
     'Function',
+    'Monadic',
 ]
