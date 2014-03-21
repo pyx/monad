@@ -4,8 +4,10 @@
 import pytest
 
 from monad.types import MonadPlus
+from monad.types import Maybe
 
 testee = [
+    Maybe,
 ]
 test_range = range(-100, 100)
 ids = [t.__name__ for t in testee]

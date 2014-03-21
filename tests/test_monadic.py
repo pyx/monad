@@ -5,9 +5,11 @@ import pytest
 
 from monad.decorators import monadic
 from monad.types import Identity
+from monad.types import Maybe
 
 testee = [
     Identity,
+    Maybe,
 ]
 test_range = range(-100, 100)
 ids = [t.__name__ for t in testee]
