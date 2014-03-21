@@ -32,6 +32,6 @@ setup(
     url='https://bitbucket.org/pyx/monad/',
     download_url=(
         'https://bitbucket.org/pyx/monad/get/%s.tar.bz2' % VERSION),
-    packages=['monad'],
+    packages=['monad', 'monad.types'],
     license='BSD-New',
 )
