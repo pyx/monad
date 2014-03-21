@@ -14,6 +14,7 @@ from .monadplus import MonadPlus
 from .identity import Identity
 from .maybe import Maybe, Just, Nothing
 from .either import Either, Left, Right
+from .list import List
 
 __all__ = [
     'Null',
@@ -31,4 +32,5 @@ __all__ = [
     'Either',
     'Left',
     'Right',
+    'List',
 ]

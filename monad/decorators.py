@@ -11,6 +11,7 @@ from .types import Function
 from .types import Monadic
 from .types import Just, Nothing
 from .types import Left, Right
+from .types import List
 from .utils import ignore_exception_set, suppress
 
 
@@ -218,4 +219,46 @@ def failsafe(callable_object=None,
                 return Left(ex)
         except tuple(exceptions) as ex:
             return Left(ex)
+    return monadic(wrapper)
+
+
+def producer(function_or_generator=None,
+             empty_on_exception=None):
+    """Transform a callable into a producer that when called, returns ``List``.
+
+    >>> @producer
+    ... def double(a):
+    ...     yield a
+    ...     yield a
+    >>> List(42) >> double
+    List(42, 42)
+
+    >>> @producer
+    ... def times(a):
+    ...     for b in List(1, 2, 3):
+    ...         yield '{}x{}={}'.format(a, b, a * b)
+    >>> List(1, 2) >> times
+    List('1x1=1', '1x2=2', '1x3=3', '2x1=2', '2x2=4', '2x3=6')
+
+    ``function_or_generator`` can be a function that returns an iterable, or a
+    generator.
+
+    ``empty_on_exception`` can be a false value, a type of exception, or a
+    tuple of exceptions.
+    The default is ``None``, which will not suppress all exceptions except
+    ``ExtractError``, in which case, an empty :py:class:`List` will be
+    returned.
+    """
+    if function_or_generator is None:
+        return partial(producer, empty_on_exception=empty_on_exception)
+
+    exceptions = ignore_exception_set(ExtractError, empty_on_exception)
+
+    @wraps(function_or_generator)
+    def wrapper(*args, **kwargs):
+        """Monadic function wrapper for List"""
+        # pylint: disable = star-args
+        with suppress(*exceptions):
+            return List.from_iterable(function_or_generator(*args, **kwargs))
+        return List.zero
     return monadic(wrapper)
