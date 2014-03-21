@@ -4,6 +4,7 @@
 """monad.actions - useful monadic actions."""
 
 from .decorators import function, monadic
+from .types import Just, Nothing
 
 
 @function
@@ -37,10 +38,65 @@ def tryout(*functions):
     return trying
 
 
+@monadic
+def first(sequence, default=Nothing, predicate=None):
+    """Iterate over a sequence, return the first ``Just``.
+
+    If ``predicate`` is provided, ``first`` returns the first item that
+    satisfy the ``predicate``, the item will be wrapped in a :class:`Just` if
+    it is not already, so that the return value of this function will be an
+    instance of :class:`Maybe` in all circumstances.
+    Returns ``default`` if no satisfied value in the sequence, ``default``
+    defaults to :data:`Nothing`.
+
+    >>> from monad.types import Just, Nothing
+    >>> first([Nothing, Nothing, Just(42), Nothing])
+    Just(42)
+    >>> first([Just(42), Just(43)])
+    Just(42)
+    >>> first([Nothing, Nothing, Nothing])
+    Nothing
+    >>> first([])
+    Nothing
+    >>> first([Nothing, Nothing], default=Just(2))
+    Just(2)
+    >>> first([False, 0, True], predicate=bool)
+    Just(True)
+    >>> first([False, 0, Just(1)], predicate=bool)
+    Just(1)
+    >>> first([False, 0, ''], predicate=bool)
+    Nothing
+    >>> first(range(100), predicate=lambda x: x > 40 and x % 2 == 0)
+    Just(42)
+    >>> first(range(100), predicate=lambda x: x > 100)
+    Nothing
+
+    This is basically a customized version of ``msum`` for :class:`Maybe`,
+    a separate function like this is needed because there is no way to write a
+    generic ``msum`` in python that be evaluated in a non-strict way.
+    The obvious ``reduce(operator.add, sequence)``, albeit beautiful, is
+    strict, unless we build up the sequence with generator expressions
+    in-place.
+
+    Maybe (pun intended!) implemented as ``MonadOr`` instead of ``MonadPlus``
+    might be more semantically correct in this case.
+    """
+    if predicate is None:
+        predicate = lambda m: m and isinstance(m, Just)
+
+    for item in sequence:
+        if predicate(item):
+            if not isinstance(item, Just):
+                item = Just(item)
+            return item
+    return default
+
+
 # As decorators function and monadic turn decorated functions into Function
 # and Monadic instance objects, respectively, doctest will ignore docstring in
 # them, the following adds those docstring into testsuite back again,
 # explicitly.
 __test__ = {
     'tryout': tryout.__doc__,
+    'first': first.__doc__,
 }

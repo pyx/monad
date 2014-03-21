@@ -12,6 +12,7 @@ from .monadic import Monadic
 from .monad import Monad
 from .monadplus import MonadPlus
 from .identity import Identity
+from .maybe import Maybe, Just, Nothing
 
 __all__ = [
     'Null',
@@ -23,4 +24,7 @@ __all__ = [
     'Monad',
     'MonadPlus',
     'Identity',
+    'Maybe',
+    'Just',
+    'Nothing',
 ]
