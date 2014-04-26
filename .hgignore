@@ -5,6 +5,7 @@ syntax: glob
 .git
 .svn
 .coverage
+.tox
 
 tags
 .tags

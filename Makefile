@@ -6,7 +6,7 @@ URL = $(shell python setup.py --url)
 
 DOCS_DIR = docs
 
-.PHONY: clean help install coverage docs doc-html doc-pdf dev-install quality release test
+.PHONY: clean help install coverage docs doc-html doc-pdf dev-install quality release test tox
 
 help:
 	@echo '$(NAME) - $(DESCRIPTION)'
@@ -17,6 +17,7 @@ help:
 	@echo '  help         : display this help text.'
 	@echo '  install      : install package $(NAME).'
 	@echo '  test         : run all tests.'
+	@echo '  tox          : run all tests with tox.'
 	@echo '  coverage     : analyze test coverage.'
 	@echo '  docs         : generate documentation files.'
 	@echo '  quality      : code quality check.'
@@ -41,7 +42,7 @@ doc-html: test
 doc-pdf: test
 	cd $(DOCS_DIR); $(MAKE) latexpdf
 
-release: quality coverage test
+release: quality coverage tox
 	@echo 'Checking release version, abort if attempt to release a dev version.'
 	echo '$(VERSION)' | grep -qv dev
 	@echo 'Bumping version number to $(VERSION), abort if no pending changes.'
@@ -55,9 +56,12 @@ release: quality coverage test
 test:
 	py.test -v
 
+tox:
+	tox
+
 quality:
-	pep8 .
-	pyflakes .
+	pep8 monad
+	pyflakes monad
 	pylint monad
 
 clean:

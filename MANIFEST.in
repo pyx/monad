@@ -2,6 +2,7 @@ include LICENSE
 include Makefile
 include MANIFEST.in
 include README.rst
+include tox.ini
 recursive-include requirements *.txt
 recursive-include tests *.py
 recursive-include docs *.py *.rst *.txt Makefile make.bat
