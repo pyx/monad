@@ -8,6 +8,7 @@ Contents:
 
    intro
    reference
+   changelog
 
 
 Indices and tables
