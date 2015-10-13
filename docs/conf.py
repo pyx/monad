@@ -19,7 +19,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 project = u'Monad'
-copyright = u'2012-2014, Philip Xu'
+copyright = u'2012-2015, Philip Xu'
 
 version = '%d.%d' % monad.__version__
 release = monad.VERSION
