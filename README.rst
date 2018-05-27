@@ -2,6 +2,70 @@
 monad - a functional python package
 ===================================
 
+.. note::
+  **This project is superseded by Hymn(https://github.com/pyx/hymn)**.
+  
+  Limited by Python's syntax, there is no way to have a clean implementation
+  of do notation, the closest thing is a ``do`` decorator on generator
+  functions using ``yield`` as ``<-``, which feels like black magic.
+
+  That's why I stopped shoehorning this into Python, and did a complete
+  rewrite in Hy (https://github.com/hylang/hy) a few years ago.
+
+  Being a lisp, or as they say, *Homoiconic Python*, Hy has the most flexible
+  syntax (or lack thereof :smile:), with it, I finally can write do notations,
+  check this out (for added fun, a ``Lazy`` monad is being demonstrated here,
+  we can never have such clean way to write thunk in pure python):
+
+  .. code:: clojure
+
+    => (import [hymn.types.lazy [force]])
+    => (require [hymn.types.lazy [lazy]])
+    => ;; lazy computation implemented as monad
+    => ;; macro lazy creates deferred computation
+    => (setv a (lazy (print "evaluate a") 42))
+    => ;; the computation is deferred, notice the value is shown as '_'
+    => a
+    Lazy(_)
+    => ;; evaluate it
+    => (.evaluate a)
+    evaluate a
+    42
+    => ;; now the value is cached
+    => a
+    Lazy(42)
+    => ;; calling evaluate again will not trigger the computation
+    => (.evaluate a)
+    42
+    => (setv b (lazy (print "evaluate b") 21))
+    => b
+    Lazy(_)
+    => ;; force evaluate the computation, same as calling .evaluate on the monad
+    => (force b)
+    evaluate b
+    21
+    => ;; force on values other than lazy return the value unchanged
+    => (force 42)
+    42
+    => (require [hymn.macros [do-monad]])
+    => ;; do notation with lazy monad
+    => (setv c (do-monad [x (lazy (print "get x") 1) y (lazy (print "get y") 2)] (+ x y)))
+    => ;; the computation is deferred
+    => c
+    Lazy(_)
+    => ;; do it!
+    => (force c)
+    get x
+    get y
+    3
+    => ;; again
+    => (force c)
+    3
+
+  **So, if you are interested in this package, please try
+  Hymn(https://github.com/pyx/hymn) instead**.
+
+
 
 Introduction
 ============
